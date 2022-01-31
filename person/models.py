@@ -1,4 +1,3 @@
-from django.utils import timezone
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -14,8 +13,8 @@ class UnsignedTinyIntField(models.SmallIntegerField):
 
 # Create your models here.
 class BaseModel(models.Model):
-    create_at = models.DateField(db_index=True, default=timezone.now)
-    update_at = models.DateField(auto_now_add=True)
+    create_at = models.DateField(db_index=True, auto_now_add=True)
+    update_at = models.DateField(auto_now=True)
 
     class Meta:
         abstract = True

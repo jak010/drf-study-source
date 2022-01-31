@@ -7,3 +7,4 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         read_only_fields = ('create_at',)
         fields = "__all__"
+
