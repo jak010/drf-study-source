@@ -4,6 +4,8 @@ from .models import Person, Watch, BaseModel
 from rest_framework import serializers
 
 
+# Refer
+# - https://dev.to/juanbenitezdev/how-to-return-datetime-in-different-time-zones-from-django-rest-framework-1396
 class BaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = BaseModel
