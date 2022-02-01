@@ -13,8 +13,8 @@ class UnsignedTinyIntField(models.SmallIntegerField):
 
 # Create your models here.
 class BaseModel(models.Model):
-    create_at = models.DateField(db_index=True, auto_now_add=True)
-    update_at = models.DateField(auto_now=True)
+    create_at = models.DateTimeField(db_index=True, auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -36,3 +36,13 @@ class Person(BaseModel):
     def clean(self):
         if self.create_at >= self.update_at:
             raise ValidationError("Update date cannot be before create date")
+
+
+class Watch(models.Model):
+    class Meta:
+        db_table = "watch"
+
+    start_at = models.DateTimeField(db_index=True, auto_now_add=True)
+    end_at = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager()

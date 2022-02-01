@@ -1,4 +1,4 @@
-from .models import Person
+from .models import Person, Watch
 from rest_framework import serializers
 
 
@@ -10,4 +10,13 @@ class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         read_only_fields = ('create_at',)
+        fields = "__all__"
+
+
+class WatchSerializer(serializers.ModelSerializer):
+    start_at = serializers.DateTimeField(required=True)
+    end_at = serializers.DateTimeField(required=True)
+
+    class Meta:
+        model = Watch
         fields = "__all__"

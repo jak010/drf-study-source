@@ -1,10 +1,10 @@
-from .models import Person
-from rest_framework.generics import ListCreateAPIView
-from .serializer import PersonSerializer
-
 from django.db import IntegrityError
 
-from .exception import DuplicateNameError
+from rest_framework.generics import ListCreateAPIView
+
+from ..models import Person
+from ..serializer import PersonSerializer
+from ..exception import DuplicateNameError
 
 
 # Create your views here.
