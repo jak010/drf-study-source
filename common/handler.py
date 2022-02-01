@@ -41,9 +41,13 @@ def custom_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
     if response is None:
+        data = {'message': '', 'extra': ''}
+
+        # if isinstance(exc, IntegrityError):
+        #     data['message'] = str(exc.args)
+        #     return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         if isinstance(exc, ApplicationError):  # API Level
-            data = {'message': '', 'extra': ''}
             data['message'] = exc.message
             data['extra'] = exc.extra
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
