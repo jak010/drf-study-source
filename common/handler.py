@@ -7,16 +7,13 @@ from rest_framework import exceptions, status
 from rest_framework.response import Response
 from django.core.exceptions import ValidationError as DjangoValidationError, PermissionDenied
 
-from rest_framework.exceptions import APIException
 from rest_framework.serializers import as_serializer_error
 from django.db.utils import DataError as _DataBaseError
-from django.db import IntegrityError
 
 
 class ApplicationError(Exception):
     def __init__(self, message, extra=None):
         super().__init__(message)
-
         self.message = message
         self.extra = extra or {}
 
