@@ -12,21 +12,20 @@ class BaseSerializer(serializers.ModelSerializer):
         fields = "__all__"
         abstract = True
 
-    def to_representation(self, instance):
-        self.fields['create_at'] = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
-        self.fields['update_at'] = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
-        return super().to_representation(instance)
-
 
 class PersonSerializer(BaseSerializer):
     name = serializers.CharField(max_length=15, allow_null=False)
     age = serializers.IntegerField(max_value=255)
-    etc = serializers.CharField(allow_null=False, max_length=100)
 
     class Meta:
         model = Person
         read_only_fields = ('create_at', 'update_at')
         fields = "__all__"
+
+    def to_representation(self, instance):
+        self.fields['create_at'] = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
+        self.fields['update_at'] = serializers.DateTimeField(default_timezone=pytz.timezone('Asia/Seoul'))
+        return super().to_representation(instance)
 
 
 class WatchSerializer(serializers.ModelSerializer):
