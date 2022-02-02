@@ -1,6 +1,5 @@
 from ..models import Watch
 from ..serializer import WatchSerializer
-from ..exception import DuplicateNameError
 
 from rest_framework.generics import ListCreateAPIView
 
