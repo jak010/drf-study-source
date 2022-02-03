@@ -24,7 +24,7 @@ class BaseModel(models.Model):
 
 class Person(BaseModel):
     class Meta:
-        db_table = "person"
+        db_table = "person"        
 
     name = models.CharField(max_length=15, unique=True, null=False)
     age = UnsignedTinyIntField()

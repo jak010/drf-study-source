@@ -8,22 +8,22 @@ from ..exception import DuplicateNameError
 from ..models import Person
 
 
+# XXX: Filter에 관한 노트
+## 만약 `CharFilter`로 다중으로 입력받고 싶다면 어떻게 해야될까?
 class PersonFilter(django_filters.FilterSet):
-    name = django_filters.AllValuesMultipleFilter()
+    name = django_filters.CharFilter(field_name='name')
+
     age = django_filters.NumberFilter(field_name='age', lookup_expr='exact')
     age_gt = django_filters.NumberFilter(field_name='age', lookup_expr='gte')
     age_lt = django_filters.NumberFilter(field_name='age', lookup_expr='lte')
 
     class Meta:
         model = Person
-        fields = ['name', 'age']
-
-    def __init__(self, *args, **kwargs):
-        super(PersonFilter, self).__init__(*args, **kwargs)
+        fields = []
 
 
 class PersonListCreateAPIView(ListCreateAPIView):
-    queryset = Person.objects.all()
+    queryset = Person.objects.all().order_by('name')
     serializer_class = PersonSerializer
     filter_class = PersonFilter
 
