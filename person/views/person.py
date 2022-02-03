@@ -10,6 +10,7 @@ from ..models import Person
 
 class PersonFilter(django_filters.FilterSet):
     name = django_filters.AllValuesMultipleFilter()
+    age = django_filters.NumberFilter(field_name='age', lookup_expr='exact')
     age_gt = django_filters.NumberFilter(field_name='age', lookup_expr='gte')
     age_lt = django_filters.NumberFilter(field_name='age', lookup_expr='lte')
 
