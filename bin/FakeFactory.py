@@ -23,7 +23,7 @@ update_at_end_date = datetime.date(year=2022, month=3, day=30)
 
 seeder = Seed.seeder()
 
-_LIMIT = 3
+_LIMIT = 25
 
 seeder.add_entity(models.Person, _LIMIT, {
     'age': lambda x: random.randint(1, 100),
