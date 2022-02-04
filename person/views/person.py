@@ -4,8 +4,15 @@ from django.db import IntegrityError
 
 from django_filters.rest_framework import filters, filterset
 
-from rest_framework.generics import ListCreateAPIView
-from ..serializer import PersonSerializer
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView
+)
+
+from ..serializer import (
+    PersonSerializer,
+    PersonUpdateSerializer
+)
 from ..exception import DuplicateNameError
 
 from ..models import Person
@@ -59,3 +66,9 @@ class PersonListCreateAPIView(ListCreateAPIView):
             serializer.save()
         except IntegrityError:
             raise DuplicateNameError()
+
+
+class PersonRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Person.objects.all()
+    lookup_field = 'id'
+    serializer_class = PersonUpdateSerializer

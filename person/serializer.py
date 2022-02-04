@@ -28,6 +28,16 @@ class PersonSerializer(BaseSerializer):
         return super().to_representation(instance)
 
 
+class PersonUpdateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=15, required=False)
+    age = serializers.IntegerField(max_value=255, required=False)
+    etc = serializers.CharField(max_length=255, required=False)
+
+    class Meta:
+        model = Person
+        fields = ['name', 'age', 'etc']
+
+
 class WatchSerializer(serializers.ModelSerializer):
     start_at = serializers.DateTimeField(required=True)
     end_at = serializers.DateTimeField(required=True)
