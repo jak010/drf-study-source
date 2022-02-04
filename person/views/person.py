@@ -17,9 +17,16 @@ class PersonFilter(django_filters.FilterSet):
     age_gt = django_filters.NumberFilter(field_name='age', lookup_expr='gte')
     age_lt = django_filters.NumberFilter(field_name='age', lookup_expr='lte')
 
+    sort = django_filters.OrderingFilter(
+        fields=(
+            ('name', 'name'),
+            ('age', 'age'),
+        ),
+    )
+
     class Meta:
         model = Person
-        fields = []
+        fields = ['name', 'age']
 
 
 class PersonListCreateAPIView(ListCreateAPIView):
