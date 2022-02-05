@@ -1,6 +1,6 @@
 import pytz
 
-from .models import Person, Watch, BaseModel
+from .models import Person, Watch, BaseModel, PersonProfile
 from rest_framework import serializers
 
 
@@ -36,6 +36,24 @@ class PersonUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = ['name', 'age', 'etc']
+
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    person_id = serializers.SerializerMethodField(method_name='set_person')
+
+    class Meta:
+        model = PersonProfile
+        fields = ['description', 'level', 'person_id']
+
+    def create(self, validated_data):
+        validated_data['person_id'] = self.context['person_id']
+        return super(ProfileUpdateSerializer, self).create(
+            validated_data)
+
+    def set_person(self, instance):
+        person_id = self.context['person_id']
+        person = Person.objects.get(id=person_id)
+        return person.id
 
 
 class WatchSerializer(serializers.ModelSerializer):

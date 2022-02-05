@@ -49,8 +49,6 @@ def custom_exception_handler(exc, context):
             data['message'] = exc.args
             return Response(data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    print(exc)
-
     if isinstance(exc.detail, (list, dict)):  # Exception Level
         response.data = {
             'detail': response.data

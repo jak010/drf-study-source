@@ -3,6 +3,8 @@ from django.utils import timezone
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from django.conf import settings
+
 
 class UnsignedTinyIntField(models.SmallIntegerField):
 
@@ -24,7 +26,7 @@ class BaseModel(models.Model):
 
 class Person(BaseModel):
     class Meta:
-        db_table = "person"        
+        db_table = "person"
 
     name = models.CharField(max_length=15, unique=True, null=False)
     age = UnsignedTinyIntField()
@@ -38,6 +40,20 @@ class Person(BaseModel):
     def clean(self):
         if self.create_at >= self.update_at:
             raise ValidationError("Update date cannot be before create date")
+
+
+class PersonProfile(BaseModel):
+    class Meta:
+        db_table = "person_profile"
+
+    person = models.OneToOneField(Person, related_name='person', name='person', on_delete=models.CASCADE)
+    level = UnsignedTinyIntField(max_length=5)
+    description = models.CharField(max_length=255)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"Profile{self.person.name}"
 
 
 class Watch(models.Model):

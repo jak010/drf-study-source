@@ -1,12 +1,13 @@
-import http
-
 from django.db import IntegrityError
 
-from django_filters.rest_framework import filters, filterset
+from django_filters.rest_framework import (
+    filters,
+    filterset
+)
 
 from rest_framework.generics import (
     ListCreateAPIView,
-    RetrieveUpdateDestroyAPIView
+    RetrieveUpdateDestroyAPIView,
 )
 
 from ..serializer import (
@@ -19,7 +20,6 @@ from ..models import Person
 
 from typing import List
 
-from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpRequest
 from django.db.models import Q
 
@@ -42,17 +42,23 @@ class PersonFilter(filterset.FilterSet):
         model = Person
         fields = ['name', 'age']
 
-    # 만약 `CharFilter`로 MultipleValue로 입력받고 싶다면 어떻게 해야될까?
+    # 만약 `CharFilter`로 Multiple Value 입력받고 싶다면 어떻게 해야될까?
     def filter_by_name(self, queryset, key: HttpRequest, value):
-        q = Q()
-
+        """
+            Note, 2022.02.05
+                WSGIRequest 통해 들어온 데이터에 MultiValue 들어있기
+                때문에 self.request.GET 처럼 써야함
+        """
         argument = self.request.GET.copy()
-        names: List = argument.getlist(key)
+        values: List = argument.getlist(key)
 
-        if len(names) != 1:
+        if len(values) != 1:
+            q = Q()
             [q.add(Q(name=value), conn_type=q.OR)
-             for value in names],
+             for value in values],
+
             return queryset.filter(q)
+
         return queryset.filter(name=value)
 
 
