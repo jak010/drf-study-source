@@ -61,7 +61,8 @@ def custom_exception_handler(exc, context):
         }
     else:
         response.data["message"] = response.data["detail"]
-        response.data["extra"] = {}
+        response.data["extra"] = exc.__context__.__repr__()
+
 
     del response.data['detail']
 

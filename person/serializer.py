@@ -3,6 +3,11 @@ import pytz
 from .models import Person, Watch, BaseModel, PersonProfile
 from rest_framework import serializers
 
+from django.db import IntegrityError
+
+from .exception import AlreadyExistPerson
+from django.shortcuts import get_object_or_404
+
 
 # Refer
 # - https://dev.to/juanbenitezdev/how-to-return-datetime-in-different-time-zones-from-django-rest-framework-1396
@@ -39,21 +44,26 @@ class PersonUpdateSerializer(serializers.ModelSerializer):
 
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
-    person_id = serializers.SerializerMethodField(method_name='set_person')
-
     class Meta:
         model = PersonProfile
         fields = ['description', 'level', 'person_id']
 
     def create(self, validated_data):
-        validated_data['person_id'] = self.context['person_id']
-        return super(ProfileUpdateSerializer, self).create(
-            validated_data)
+        try:
+            return super(ProfileUpdateSerializer, self).create(validated_data)
+        except IntegrityError as exc:
+            if "Duplicate" in exc.args[1]:
+                raise AlreadyExistPerson()
 
-    def set_person(self, instance):
-        person_id = self.context['person_id']
-        person = Person.objects.get(id=person_id)
-        return person.id
+    def validate(self, attrs):
+        person = get_object_or_404(Person, id=self.context['person_id'])
+
+        # selected_related 사용법
+        # select_related : OneToOneRel, Foreign Key
+        # profile = PersonProfile.objects.select_related('person').get(person=person)
+
+        attrs['person_id'] = person.id
+        return attrs
 
 
 class WatchSerializer(serializers.ModelSerializer):
