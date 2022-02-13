@@ -47,7 +47,7 @@ class PersonProfile(BaseModel):
         db_table = "person_profile"
 
     person = models.OneToOneField(Person, related_name='person', name='person', on_delete=models.CASCADE)
-    level = UnsignedTinyIntField(max_length=5)
+    level = UnsignedTinyIntField()
     description = models.CharField(max_length=255)
 
     objects = models.Manager()

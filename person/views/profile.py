@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from ..serializer import (
     ProfileUpdateSerializer
 )
@@ -6,8 +6,10 @@ from ..serializer import (
 from ..models import PersonProfile
 
 
-class ProfileAPIView(ListCreateAPIView):
-    # queryset = PersonProfile.objects.all()
+class ProfileAPIView(
+    CreateAPIView,  # POST
+    RetrieveUpdateDestroyAPIView  # GET, PUT, DELETE
+):
     serializer_class = ProfileUpdateSerializer
     lookup_url_kwarg = 'person_id'
 
@@ -18,3 +20,8 @@ class ProfileAPIView(ListCreateAPIView):
             'view': self,
             'person_id': self.kwargs.get(self.lookup_url_kwarg)
         }
+
+    def get_queryset(self):
+        return PersonProfile.objects.filter(
+            person_id=self.kwargs.get(self.lookup_url_kwarg)
+        )
